@@ -6,11 +6,11 @@ import string
 #   d   :   a list of path to files
 
 # OUTPUT
-#   f   :   a 2-d array of the stringed feature
-#   V   :   an array of unique words from the document 
+#   dataset  :   a 2-d numpy array of normalized feature and it's class.
+#   bag_of_words   :   an array of unique words from the document 
 
 def main(d):
-    extract_from_files(d)
+    dataset = extract_from_files(d)
 
 
 # Extract data from files
@@ -27,7 +27,8 @@ def extract_from_files(d):
     # and class(string) then append to the features array.
         for line in fo:
             f_split = line.split('\t')
-            feature = f_split[0]
+            # Perform sentence normalization on the feature
+            feature = normalize_sentence(f_split[0])
             f_class = str(int(f_split[1]))
             features.append([feature, f_class])
             
@@ -50,8 +51,22 @@ def normalize_sentence(feat):
     return norm_feature
 
 
+# Build a vocabulary of words from the feature sentences
+def build_vocab(f_list):
+    bag_of_words = []
+    # Constraint: Words must be unique
+    # Transpose numpy array to extract just the features from the dataset
+    #
+    corpus = f_list.T[0]
+    # convert corpus to a string of words
+    concat_corpus = " ".join(corpus)
+    # convet converted string of words to list of words
+    split_corpus = concat_corpus.split(" ")
+    # Make list of words unique
+    
 
-#def build_vocab(words):
+    return bag_of_words
+
 
 
 

@@ -1,6 +1,6 @@
-import  numpy as np
-import  math
-from data_wrangler import extract_from_files
+import numpy as np
+import math
+import data_wrangler as dw
 
 # Tests the correctnes of every file output in this
 # project.
@@ -16,7 +16,7 @@ def main():
 
 #   Specific test for feature output
 def feature_test(d):
-    f = extract_from_files(d)
+    f = dw.extract_from_files(d)
     shape = f.shape
     return shape
 

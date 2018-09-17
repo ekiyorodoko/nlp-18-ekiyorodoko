@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import string
 
 # INPUT
 #   d   :   a list of path to files
@@ -34,6 +35,23 @@ def extract_from_files(d):
 
     # return an ndarray convert to numpy array
     return np.array(features)
-    
+
+# Normalize the sentences: Focus on key aspects of the sentences to 
+# get better prediction results.
+def normalize_sentence(feat):
+    # Step 1: Extract words(group of character's before a space including 
+    # punctuations) from sentences
+    words = feat.split(" ")
+    # Step 2: Remove punctuations from words
+    nwords = words.translate(str.maketrans('','',string.punctuation))
+    # Step 3: Convert words to lower case
+    norm_feature = nwords.lower()  
+
+    return norm_feature
+
+
+
+#def build_vocab(words):
+
 
 

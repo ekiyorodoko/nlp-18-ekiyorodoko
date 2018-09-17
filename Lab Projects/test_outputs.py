@@ -7,7 +7,9 @@ from data_wrangler import extract_from_files
 
 def main():
     paths = ["dataset/yelp_labelled.txt"]
-    print(feature_test(paths))
+
+    if (feature_test(paths)==(3000,2)):
+        print("Features passed output test")
 
 #   Specific test for feature output from data_wrangler.py
 def feature_test(d):

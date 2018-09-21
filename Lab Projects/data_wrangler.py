@@ -9,13 +9,10 @@ import string
 #   dataset  :   a 2-d numpy array of normalized feature and it's class.
 #   bag_of_words   :   an array of unique words from the document 
 
-def main(d):
-    dataset = extract_from_files(d)
-
 
 # Extract data from files
-def extract_from_files(d):
-
+def extract_from_files():
+    d = ['dataset/amazon_cells_labelled.txt','dataset/imdb_labelled.txt','dataset/yelp_labelled.txt']
     # Initialize feature list
     features = []
 
@@ -40,33 +37,17 @@ def extract_from_files(d):
 # Normalize the sentences: Focus on key aspects of the sentences to 
 # get better prediction results.
 def normalize_sentence(feat):
-    # Step 1: Extract words(group of character's before a space including 
+    # Step 1: Remove punctuations from words
+    nwords = feat.translate(str.maketrans('','',string.punctuation))
+    # Step 2: Extract words(group of character's before a space including 
     # punctuations) from sentences
-    words = feat.split(" ")
-    # Step 2: Remove punctuations from words
-    nwords = words.translate(str.maketrans('','',string.punctuation))
+    words = nwords.split(" ") 
     # Step 3: Convert words to lower case
-    norm_feature = nwords.lower()  
+    norm_feature = words.lower()  
 
     return norm_feature
 
-
-# Build a vocabulary of words from the feature sentences
-def build_vocab(f_list):
-    bag_of_words = []
-    # Constraint: Words must be unique
-    # Transpose numpy array to extract just the features from the dataset
-    #
-    corpus = f_list.T[0]
-    # convert corpus to a string of words
-    concat_corpus = " ".join(corpus)
-    # convet converted string of words to list of words
-    split_corpus = concat_corpus.split(" ")
-    # Make list of words unique
-    
-
-    return bag_of_words
-
+extract_from_files()
 
 
 

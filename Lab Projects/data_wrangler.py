@@ -39,12 +39,12 @@ def extract_from_files():
 def normalize_sentence(feat):
     # Step 1: Remove punctuations from words
     nwords = feat.translate(str.maketrans('','',string.punctuation))
-    # Step 2: Extract words(group of character's before a space including 
+    # Step 2: Convert words to lower case
+    norm_feature = nwords.lower() 
+    # Step 3: Extract words(group of character's before a space including 
     # punctuations) from sentences
-    words = nwords.split(" ") 
-    # Step 3: Convert words to lower case
-    norm_feature = words.lower()  
-
+    words = norm_feature.split(" ") 
+     
     return norm_feature
 
 extract_from_files()

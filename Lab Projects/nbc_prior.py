@@ -20,12 +20,22 @@ def build_vocab(f_list):
 
     return bag_of_words
 
-def priors():
+def class_count():
     features = dw.extract_from_files()
-    classes = features[1]
-    unique, counts = np.unique(classes, return_count = True)
-    prior_dict = dict(zip(unique, counts))
-    return prior_dict
+    classes = features.T[1]
+    unique, counts = np.unique(classes, return_counts = True)
+    class_dict = dict(zip(unique, counts))
+    return class_dict
 
-print(priors)
+def log_prior():
+    new_class_dict = class_count()
+    Ndoc = 0
+    for c in new_class_dict:
+        Ndoc += new_class_dict[c]
+    for key in new_class_dict:
+        Nc = new_class_dict[c]
+        new_class_dict[key] = log(Nc/Ndoc)
+    return new_class_dict
+
+print(log_prior())
 

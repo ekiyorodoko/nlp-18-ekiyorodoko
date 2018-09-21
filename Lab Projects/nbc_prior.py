@@ -5,20 +5,6 @@ import data_wrangler as dw
 
 # Build a vocabulary of words from the feature sentences
 
-def build_vocab(f_list):
-    bag_of_words = []
-    # Constraint: Words must be unique
-    # Transpose numpy array to extract just the features from the dataset
-    #
-    corpus = f_list.T[0]
-    # convert corpus to a string of words
-    concat_corpus = " ".join(corpus)
-    # convet converted string of words to list of words
-    split_corpus = concat_corpus.split(" ")
-    # Make list of words unique
-
-
-    return bag_of_words
 
 def class_count():
     features = dw.extract_from_files()
@@ -34,8 +20,7 @@ def log_prior():
         Ndoc += new_class_dict[c]
     for key in new_class_dict:
         Nc = new_class_dict[c]
-        new_class_dict[key] = log(Nc/Ndoc)
+        new_class_dict[key] = math.log(Nc/Ndoc)
     return new_class_dict
 
-print(log_prior())
 

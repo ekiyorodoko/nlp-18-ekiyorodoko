@@ -38,3 +38,4 @@ def likelihood():
             lik[word][f_class] = pwc
 
     return lik
+    

@@ -12,7 +12,7 @@ import string
 
 # Extract data from files
 def extract_from_files():
-    d = ['dataset/amazon_cells_labelled.txt','dataset/imdb_labelled.txt','dataset/yelp_labelled.txt']
+    d = ['dataset/amazon_cells_labelled.txt']
     # Initialize feature list
     features = []
 
@@ -40,12 +40,13 @@ def normalize_sentence(feat):
     # Step 1: Remove punctuations from words
     nwords = feat.translate(str.maketrans('','',string.punctuation))
     # Step 2: Convert words to lower case
-    norm_feature = nwords.lower() 
+    norm_feature = nwords.lower()
     # Step 3: Extract words(group of character's before a space including 
     # punctuations) from sentences
-    words = norm_feature.split(" ") 
+    words = norm_feature.split(" ")
+    words = " ".join(words)
      
-    return norm_feature
+    return words
 
 extract_from_files()
 

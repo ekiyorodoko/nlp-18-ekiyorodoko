@@ -1,7 +1,6 @@
 import math
 import numpy as np
 import string
-import random
 
 d = ["dataset/imdb_labelled.txt","dataset/yelp_labelled.txt", "dataset/amazon_cells_labelled.txt" ]
 dataset = []

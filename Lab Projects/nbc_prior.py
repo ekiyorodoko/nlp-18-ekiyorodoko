@@ -20,7 +20,7 @@ def log_prior():
         Ndoc += new_class_dict[c]
     for key in new_class_dict:
         Nc = new_class_dict[c]
-        new_class_dict[key] = math.log(Nc/Ndoc)
+        new_class_dict[key] = Nc/Ndoc
     return new_class_dict
 
 

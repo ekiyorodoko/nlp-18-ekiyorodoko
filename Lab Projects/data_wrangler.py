@@ -30,7 +30,7 @@ def extract_from_files():
             features.append([feature, f_class])
             
         fo.close()
-
+        
     # return an ndarray convert to numpy array
     return np.array(features)
 

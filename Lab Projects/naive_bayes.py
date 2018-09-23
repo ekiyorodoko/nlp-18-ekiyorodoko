@@ -29,20 +29,16 @@ for i in range(len(d)):
         dataset.append([norm_feature, f_class])
     fo.close()
 
-# Shuffle dataset randomly
-random.shuffle(dataset)
-
-#seperate tarining and test data
-train_data = dataset[:int(len(dataset)*0.7)]
-test_data = dataset[:int(len(dataset)*0.3)]
 
 # Select documents of reviews from dataset
-np_dataset = np.array(train_data).T
+np_dataset = np.array(dataset).T
 doc = np_dataset[0]
 
 # Seperate classes from the dataset
 classes = np_dataset[1]
 unique, counts = np.unique(classes, return_counts = True)
+
+# unique classes
 f_c = dict(zip(unique, counts))
 
 
@@ -82,25 +78,19 @@ def train_nb(D, C):
     return log_priors,log_liks
 
 def test(testdoc, logprior, loglikelihood, C, V):
-    '''
     open_doc = open(testdoc, "r")
     testset = []
     for review in open_doc:
-        ## remember to remove this code segment 
-        r_split = review.split('\t')
-        # Perform sentence normalization on the feature
-        test_doc = r_split[0]
-        ## ....................................
-
 
         # Step 1: Remove punctuations from words
-        r_strip = test_doc.translate(str.maketrans('','',string.punctuation))
+        r_strip = review.translate(str.maketrans('','',string.punctuation))
         # Step 2: Convert words to lower case
         testset.append(r_strip.lower())
-    '''
+    open_doc.close()
+
     output_prob = []
 
-    for sentence in testdoc:
+    for sentence in testset:
         sentence = sentence.split(" ")
         class_prob = []
         for c in C:
@@ -117,23 +107,13 @@ def test(testdoc, logprior, loglikelihood, C, V):
 
     return output_prob
 
-def run_test(d):
+def main():
     nb_train = train_nb(doc,f_c)
-    nb_test = np.array(d).T
-    classes = nb_test[1]
-    reviews = nb_test[0]
-    
-    pred_output = test(reviews, nb_train[0], nb_train[1], f_c, split_BoW)
+    filename = input("Please enter the path to your file:\n")
+    nb_test = test(filename, nb_train[0], nb_train[1], f_c, split_BoW)
 
-    pred_count = 0
-    for i in range(len(d)):
-        if (pred_output[i]==classes[i]):
-            pred_count += 1
+    fw = open("results_file.txt", "w")
+    fw.write("\n".join(nb_test))
+    fw.close()
 
-    accuracy = (pred_count/len(pred_output))*100
-    return accuracy
-
-
-
-
-print("Classifier accuracy: ",run_test(test_data),"%")
+main()

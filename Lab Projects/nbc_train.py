@@ -1,45 +1,25 @@
 import math
 import numpy as np
-from data_wrangler import extract_from_files
-from nbc_prior import log_prior
-import re
 
-def build_vocab(f_list):
-    # Constraint: Words must be unique
-    # Transpose numpy array to extract just the features from the dataset
-    #
-    corpus = f_list.T[0]
-    # convert corpus to a string of words
-    concat_corpus = " ".join(corpus)
-    # convert converted string of words to list of words
-    split_corpus = concat_corpus.split(" ")
-    # Make list of words unique
-    unique, counts = np.unique(split_corpus, return_counts = True)
-    bag_of_words = dict(zip(unique, counts))
+def train_nb(D, C, dataset, V):
+    Ndoc = len(D)
+    log_priors = {}
+    log_liks = {}
+    for c in C:
+        log_liks[c] = {}
+        Nc = C[c]
+        log_prior = math.log(Nc/Ndoc)
+        log_priors[c] = log_prior
+        arb_array = []
+        for data in dataset:
+            if (data[1]==c):
+                arb_array.append(data[0])
+        #bigdoc[c]=arb_array
 
-    return bag_of_words
+        c_BoW = " ".join(arb_array).split(" ")
+        for w in V:
+            count_wc = c_BoW.count(w)
+            log_lik = math.log((count_wc + 1)/len(c_BoW))
+            log_liks[c][w] = log_lik
 
-def likelihood():
-    features = extract_from_files()
-    log_priors = log_prior()
-    V = build_vocab(features)
-    lik = {}
-    f_classes = list(log_priors.keys())
-    for word in V:
-        lik[word] = {}
-        for f_class in f_classes:
-            vwc = 0
-            wc = []
-            for feature in features:
-                # Check if the feature belongs to the class being iterated
-                if feature[1] == f_class:
-                    #count = sum(1 for _ in re.finditer(r'\b%s\b' % re.escape(word), feature[0]))
-                    f_split = feature[0].split(" ")
-                    wc.append(f_split.count(word))
-                    vwc += len(f_split)
-
-            for i in range(len(wc)):
-                pwc = (wc[i] + 1)/(vwc + len(V))
-                lik[word][f_class] = pwc
-
-    return lik
+    return log_priors,log_liks

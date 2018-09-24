@@ -1,8 +1,9 @@
-import math
 import numpy as np
+import math
 
-def train_nb(D, C, dataset, V):
-    Ndoc = len(D)
+
+def train_nb(C,V, doc, dataset):
+    Ndoc = len(doc)
     log_priors = {}
     log_liks = {}
     for c in C:

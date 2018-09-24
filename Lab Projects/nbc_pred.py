@@ -1,49 +1,33 @@
-import math
 import numpy as np
-from nbc_train import likelihood, build_vocab
-from nbc_prior import log_prior
-from data_wrangler import normalize_sentence, extract_from_files
+import math
+import string
 
-def predict_class(d):
-    doc = preprocess_test_data(d)
-    log_lik = likelihood()
-    log_priors = log_prior()
-    words = list(build_vocab(extract_from_files()).keys())
-    pred_sentence = []
-    for sentence in doc:
+def test(testdoc, logprior, loglikelihood, C, V):
+    open_doc = open(testdoc, "r")
+    testset = []
+    for review in open_doc:
+
+        # Step 1: Remove punctuations from words
+        r_strip = review.translate(str.maketrans('','',string.punctuation))
+        # Step 2: Convert words to lower case
+        testset.append(r_strip.lower())
+    open_doc.close()
+
+    output_prob = []
+
+    for sentence in testset:
         sentence = sentence.split(" ")
-        pred_class = {}
-        for f_class in log_priors:
-            sum_c = log_priors[f_class]
-            for word in sentence:
-                if word in words:
-                    sum_c *= log_lik[word][f_class]
-            pred_class[f_class] = sum_c
-        pred_sentence.append(pred_class)
-    
-    pred_output = []
-    p_c = 0
-    for i in range(len(pred_sentence)):
-        p_c = np.argmax(list(pred_sentence[i].values()))
-        print(p_c)
-        p_class = [c for c,f in pred_sentence[i].items() if f==p_c]
-        #print(p_class)
-        pred_output.append(p_class)
-    print(len(pred_sentence))
+        class_prob = []
+        for c in C:
+            sum_c = logprior[c] 
+            for i in range(len(sentence)):
+                word = sentence[i]
+                if word in V:
+                    sum_c += loglikelihood[c][word]
+            class_prob.append(sum_c)
+        output_prob.append(np.argmax(class_prob))
 
-    pred_output = "\n".join(pred_output)
-    return pred_class
+    for i in range(len(output_prob)):
+        output_prob[i] = str(output_prob[i])
 
-def preprocess_test_data(d):
-    doc = []
-    fo = open(d, "r")
-    for line in fo:
-        f_split = line.split('\t')
-        # Perform sentence normalization on the feature
-        sentence = normalize_sentence(f_split[0])
-        doc.append(sentence)
-    return doc
-    
-predict_class('dataset/amazon_cells_labelled.txt')
-
-
+    return output_prob

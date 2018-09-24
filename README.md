@@ -1,9 +1,11 @@
 # nlp - 2018 - ekiyorodoko
 Natural Language Processing - Fall 2018 Lab
+
 This is a repository containing all project and lab code by Ekiyor Odoko in the Natural Language Processing class of Ashesi University's Fall 2018 semester.  
 
 ## Lab Project 1
 In this project, I implemented Jurafsky's pseudocode to build a binary naive bayes classifier
+
 **Note:** The classifier was trained with dataset containing reviews of products, movies etc. So it predicts either 0 or 1 i.e. negative and positive respectively
 
 ### Instructions

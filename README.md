@@ -1,4 +1,4 @@
-# NLP - 2018 - EKIYOR ODOKO
+# nlp - 2018 - ekiyorodoko
 Natural Language Processing - Fall 2018 Lab
 This is a repository containing all project and lab code by Ekiyor Odoko in the Natural Language Processing class of Ashesi University's Fall 2018 semester.  
 

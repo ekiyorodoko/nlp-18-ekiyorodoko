@@ -15,8 +15,8 @@ import data_wrangler as dw
 # In[4]:
 
 
-paths = ["dataset/imdb_labelled.txt","dataset/yelp_labelled.txt", "dataset/amazon_cells_labelled.txt" ]
-
+paths = ["dataset/amazon_cells_labelled.txt" ]
+# ["dataset/imdb_labelled.txt","dataset/yelp_labelled.txt",
 
 # In[5]:
 
@@ -68,6 +68,8 @@ if '' in BoW:
 # Make list of words unique
 u_words, count = np.unique(BoW, return_counts = True)
 V = dict(zip(u_words, count))
+print(len(u_words))
+exit()
 
 
 # In[12]:
@@ -75,6 +77,8 @@ V = dict(zip(u_words, count))
 
 def main():
     nb_train = train.train_nb(C,V, doc, dataset)
+    print(nb_train[0])
+    exit()
     filename = input("Please enter the path to your file:\n")
     try:
         nb_test = pred.test(filename, nb_train[0], nb_train[1], C, V)

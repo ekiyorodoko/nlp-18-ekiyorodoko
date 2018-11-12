@@ -1,48 +1,71 @@
 import sys
+import string
 import pandas as pd
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model.logistic import LogisticRegression
+import nltk
 
 
 def main():
     # Read from standard input
     input_ = sys.argv
-    classifier_type, version, output_file = input_[1], input_[2], input_[3]
+    classifier_type, version, input_ = input_[1], input_[2], input_[3]
+
+    classifier = GaussianNB()
     
-    if classifier_type == "nb":
-        classifier = GaussianNB()
-        #  Load data using pandas dataframe
-        data = pd.read_table("dataset.txt", sep='\t', header=None, names=['text', 'label'])
-        if version == "n":    
-            normalize(data)
+    #  Load data using pandas dataframe
+    data = pd.read_table("dataset.txt", sep='\t', header=None, names=['text', 'label'])
+    X_test = pd.read_table(input_, header=None, names=['input'])
+
+    #   convert string labels to integers
+    func = lambda x : [int(y) for y in x]
+    func(data['label'])
+
+    if classifier_type == "lr":
+        classifier = LogisticRegression()
         
-        # Split data into training and testing
-        X_train, X_test, y_train, y_test = train_test_split(data['text'], data['label'], test_size=0.2, random_state=69)
+    if version == "n":    
+        data['text'] = normalize(data['text'])
+        X_test = normalize(X_test['input'])
+    
 
-        # Predict labels for test documents
-        y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    # tokenization: convert text document to matrix of tokens
+    count_vect = CountVectorizer()  
 
-    else: 
-        if version = "n":
-            #
-        else:
-            #
+    counts = count_vect.fit_transform(data['text'])
+    X_test = count_vect.transform(X_test).toarray()
+    
+
+    # Split data into training and testing
+    X_train = counts.toarray()
+    y_train = data['label']
+  
+
+    # Predict labels for test documents
+    train = classifier.fit(X_train, y_train)
+    y_pred = train.predict(X_test)
+
+    # write output to file
+    fw = open("results"+classifier_type+version+".txt", "w")
+    write = lambda x : [fw.write(str(y)+"\n") for y in x ]
+    write(y_pred)
+    fw.close()
+
 
 # Normalize document text
 def normalize(dataset):
     # casefolding: convert all characters in document to lower case
-    dataset['text'] = dataset.text.map(lambda x: x.lower())
+    dataset = dataset.map(lambda x: x.lower())
 
     # remove all punctuation
-    dataset['text'] = dataset.text.replace('[^\w\s]', '')
+    rem_punc = lambda x : [y.translate(str.maketrans('','',string.punctuation)) for y in x]
+    dataset = rem_punc(dataset)
+    
+    return dataset
 
-    # tokenization: convert text into single words
 
-
-    X_train, X_test, y_train, y_test = train_test_split(dataset['text'], dataset['label'], test_size=0.2, random_state=19)
-
-# count_vect = CountVectorizer()  
-# counts = count_vect.fit_transform(data['text']) 
-
+main()
 

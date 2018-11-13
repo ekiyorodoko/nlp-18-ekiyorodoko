@@ -1,7 +1,6 @@
 import sys
 import string
 import pandas as pd
-import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
@@ -18,6 +17,7 @@ def main():
     
     #  Load data using pandas dataframe
     data = pd.read_table("dataset.txt", sep='\t', header=None, names=['text', 'label'])
+
     X_test = pd.read_table(input_, header=None, names=['input'])
 
     #   convert string labels to integers
